@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+  	/* Reset & base */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', sans-serif;
+	background: #f4f7fc;
+	color: #333;
+	line-height: 1.6;
+	scroll-behavior: smooth;
+}
+
+/* Header */
+header {
+	background: linear-gradient(to right, #0077cc, #00b4d8);
+	padding: 40px 20px;
+	text-align: center;
+	color: white;
+}
+
+header .logo {
+	font-size: 2.2rem;
+	font-weight: bold;
+}
+
+header p {
+	margin-top: 10px;
+	font-size: 1.1rem;
+}
+
+/* Cards Section */
+.card-section {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	padding: 40px 20px;
+	gap: 30px;
+}
+
+.card {
+	background: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	padding: 30px;
+	width: 280px;
+	text-align: center;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+}
+
+.card i {
+	font-size: 3rem;
+	color: #0077cc;
+	margin-bottom: 15px;
+	transition: color 0.3s ease;
+}
+
+.card h3 {
+	margin-bottom: 10px;
+	font-size: 1.4rem;
+	transition: color 0.3s ease;
+}
+
+.card p {
+	color: #555;
+	font-size: 0.95rem;
+	transition: color 0.3s ease;
+}
+
+/* Hover effect like button */
+.card::after {
+	content: "";
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	background: rgba(0,119,204,0.1);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 16px 28px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover::after {
+	opacity: 1;
+}
+
+.card:hover i, 
+.card:hover h3 {
+	color: #0077cc;
+}
+
+/* Footer */
+footer {
+	text-align: center;
+	padding: 20px;
+	background: #eaf1f8;
+	margin-top: 40px;
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Class Resources</div>
+    <p>Your Space to Learn, Code & Test</p>
+  </header>
+
+  <main>
+    <section class="card-section">
+      <div class="card" onclick="goToPage('online-test.html')">
+        <i class="fas fa-laptop-code"></i>
+        <h3>Online Test</h3>
+        <p>Practice live quizzes & tests to boost learning.</p>
+      </div>
+
+      <div class="card" onclick="goToPage('pdfs.html')">
+        <i class="fas fa-file-pdf"></i>
+        <h3>PDFs</h3>
+        <p>Download study materials & notes in PDF format.</p>
+      </div>
+
+      <div class="card" onclick="goToPage('codes.html')">
+        <i class="fas fa-code"></i>
+        <h3>Codes</h3>
+        <p>Explore code snippets in HTML, JS, Python, and more.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>If you encounter any bugs, errors, or unexpected behavior, please report them to me. Your feedback is valuable and will help in making this site better.</p>
+  </footer>
+
+  <script>
+    function goToPage(link) {
+      window.open(link, "_blank");
+    }
+  </script>
+</body>
+</html>
