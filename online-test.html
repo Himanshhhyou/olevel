@@ -1,201 +1,335 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Online Test</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Test • Chapter-wise</title>
+  
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
-    .test-card {
-      border-left: 6px solid #0d6efd; /* default blue strip */
-      transition: 0.3s;
-    }
-    .test-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .test-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-    .test-date {
-      font-size: 0.9rem;
-      background: #f1f1f1;
-      padding: 4px 10px;
-      border-radius: 12px;
-      color: #555;
-      display: inline-block;
-      margin-top: 4px;
-    }
-    .past {
-      opacity: 0.6;
-    }
-    .today {
-      border-left: 6px solid #198754 !important; /* green strip */
-      background: #e9f9ee;
-      box-shadow: 0 0 10px rgba(25, 135, 84, 0.3);
+    :root{
+      --bg: linear-gradient(180deg,#f7f8ff 0%, #f2f7ff 35%, #f8fbff 100%);
+      --brand:#0d6efd;        /* primary */
+      --brand-2:#6f42c1;      /* accent */
+      --ok:#198754;           /* success */
+      --warn:#ffc107;         /* warning */
+      --danger:#dc3545;       /* danger */
+      --muted:#6c757d;        /* muted text */
+      --card-bg:#ffffff;      /* card */
+      --glass: rgba(255,255,255,.5);
+      --shadow: 0 8px 28px rgba(0,0,0,.08);
     }
 
-    /* LIVE badge */
-    .live-badge {
-      background: #dc3545;
-      color: white;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      animation: blink 1s infinite;
-    }
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      animation: pulse 1s infinite;
+    html,body{height:100%}
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color:#1f2937;
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    /* ===== Hero ===== */
+    .hero{
+      background: radial-gradient(1200px 400px at 10% -10%, rgba(13,110,253,.15), transparent),
+                  radial-gradient(900px 350px at 90% 0%, rgba(111,66,193,.15), transparent);
+      border-bottom: 1px solid rgba(13,110,253,.12);
     }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.5); }
-      100% { transform: scale(1); }
+    .hero .card{
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));
+      border: 1px solid rgba(13,110,253,.08);
+      box-shadow: var(--shadow);
     }
+
+    /* ===== Filter bar (sticky) ===== */
+    .toolbar{
+      position: sticky; top: 0; z-index: 1030;
+      backdrop-filter: saturate(120%) blur(8px);
+      background: rgba(255,255,255,.7);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .filter-pills{
+      overflow-x: auto; white-space: nowrap;
+      scrollbar-width: thin;
+    }
+    .filter-pills .btn{
+      border-radius: 999px;
+    }
+
+    /* ===== Cards ===== */
+    .test-card{ 
+      background: var(--card-bg);
+      border: 1px solid rgba(0,0,0,.06);
+      border-left: 6px solid var(--brand);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .test-card:hover{ transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,.12); }
+    .test-title{ font-weight: 700; font-size: 1.05rem; }
+    .test-sub{ font-size: .875rem; color: var(--muted); }
+    .test-date-chip{ font-size:.8rem; border-radius:999px; padding:.25rem .6rem; background:#f1f5f9; }
+
+    /* Status visuals */
+    .today{ border-left-color: var(--ok) !important; background: #f4fff7; }
+    .upcoming{ border-left-color: var(--brand) !important; }
+    .past{ opacity:.7; }
+
+    /* Live badge */
+    .live-badge{
+      display:inline-flex; align-items:center; gap:.4rem;
+      background: var(--danger); color:#fff; border-radius:999px; padding:.25rem .6rem; font-size:.75rem; font-weight:700;
+      animation: liveBlink 1s infinite;
+    }
+    .live-dot{ width:8px; height:8px; border-radius:999px; background:#fff; animation: livePulse 1s infinite; }
+    @keyframes liveBlink{0%,100%{opacity:1}50%{opacity:.5}}
+    @keyframes livePulse{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+    /* Buttons */
+    .btn-soft{ background:#eef2ff; border-color:#e0e7ff; }
+    .btn-soft:hover{ background:#e0e7ff; }
+    .btn-round{ border-radius:999px; }
+
+    /* Accordion override */
+    .accordion-button{ font-weight:700 }
+
+    /* Small helpers */
+    .gap-6{ gap:1.5rem }
+
+    /* Better tap targets on mobile */
+    .btn{ padding:.55rem 1rem; }
+
+    /* Empty state */
+    .empty{ display:none; }
   </style>
 </head>
-<body class="bg-light">
+<body>
 
-  <!-- Header -->
-  <header class="bg-primary text-white text-center py-4 shadow">
-    <h1 class="mb-1">📝 Online Test</h1>
-    <p class="mb-0">Practice and test your knowledge</p>
-  </header>
-
-  <!-- Main -->
-  <main class="container my-5">
-    <h2 class="text-center mb-4">Available Tests</h2>
-
-    <div class="row justify-content-center">
-      <div class="col-lg-7">
-
-        <!-- Test 1 -->
-        <div class="card shadow-sm mb-3 test-card" data-date="22/08/2025">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <div class="test-title">IP Address</div>
-              <span class="test-date">22/08/2025</span>
-            </div>
-            <a href="https://forms.gle/8pUBk74vazhysvVWA" target="_blank" class="btn btn-primary btn-sm">Start Test</a>
-          </div>
-        </div>
-
-        <!-- Test 2 -->
-        <div class="card shadow-sm mb-3 test-card" data-date="23/08/2025">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <div class="test-title">Binary Number</div>
-              <span class="test-date">23/08/2025</span>
-            </div>
-            <a href="https://forms.gle/cNmLasjNMrJ3mCVp7" target="_blank" class="btn btn-primary btn-sm">Start Test</a>
-          </div>
-        </div>
-
-        <!-- Test 3 -->
-        <div class="card shadow-sm mb-3 test-card" data-date="25/08/2025">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <div class="test-title">Miscellaneous CH1</div>
-              <span class="test-date">25/08/2025</span>
-            </div>
-            <a href="https://forms.gle/ccUrFcU2ZCc9eLGc6" target="_blank" class="btn btn-primary btn-sm">Start Test</a>
-          </div>
-        </div>
-        
-        <!-- Test 4 (Today - LIVE) -->
-        <div class="card shadow-sm mb-3 test-card" data-date="29/08/2025">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <div class="d-flex align-items-center gap-2">
-                <div class="test-title">Front-end & Back-end</div>
-                <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+  <!-- Hero -->
+  <section class="hero py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card border-0 rounded-4 p-4 p-md-5">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+              <div>
+                <h1 class="fw-bold mb-2">📝 Online Test — Chapter-wise</h1>
+                <p class="mb-0 text-secondary">Practice smarter. Filter by Today, Upcoming, or Past. Tricky Questions available in हिन्दी & English.</p>
               </div>
-              <span class="test-date">29/08/2025</span>
+              <a href="#ch1" class="btn btn-primary btn-round shadow-sm"><i class="bi bi-lightning-charge-fill me-1"></i>Jump to Chapter 1</a>
             </div>
-            <a href="https://forms.gle/V1eJDFJ5WCHJsRce7" target="_blank" class="btn btn-primary btn-sm">Start Test</a>
           </div>
         </div>
-
-<!-- Test 5 (Tricky Question with Hindi/English) -->
-<div class="card shadow-sm mb-3 test-card" data-date="02/09/2025">
-  <div class="card-body d-flex justify-content-between align-items-center">
-    <div>
-      <div class="d-flex align-items-center gap-2">
-        <div class="test-title">Chapter 1 - Tricky Questions</div>
-        <span class="live-badge d-none"><span class="live-dot"></span>LIVE</span>
       </div>
-      <span class="test-date">02/09/2025</span>
     </div>
-    <div class="d-flex gap-2">
-      <a href="https://forms.gle/L3vNqoL1gVN3qNVk8" target="_blank" class="btn btn-success btn-sm">हिन्दी</a>
-      <a href="https://forms.gle/5ZdJLAttPGK1zUqGA" target="_blank" class="btn btn-primary btn-sm">English</a>
+  </section>
+
+  <!-- Toolbar (sticky) -->
+  <div class="toolbar py-2">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2">
+        <!-- Pills -->
+        <div class="filter-pills d-flex gap-2">
+          <button class="btn btn-outline-primary btn-round active" data-filter="all" onclick="setFilter(this)"><i class="bi bi-grid me-1"></i>All</button>
+          <button class="btn btn-outline-success btn-round" data-filter="today" onclick="setFilter(this)"><i class="bi bi-calendar-day me-1"></i>Today</button>
+          <button class="btn btn-outline-info btn-round" data-filter="upcoming" onclick="setFilter(this)"><i class="bi bi-calendar2-week me-1"></i>Upcoming</button>
+          <button class="btn btn-outline-secondary btn-round" data-filter="past" onclick="setFilter(this)"><i class="bi bi-archive me-1"></i>Past</button>
+        </div>
+        <!-- Search -->
+        <div class="ms-md-3 flex-grow-1">
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input id="search" type="search" class="form-control" placeholder="Search test name…" oninput="applyFilters()" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
+  <!-- Content -->
+  <main class="py-4">
+    <div class="container">
+      <div class="accordion" id="chapters">
+        <!-- Chapter 1 -->
+        <div class="accordion-item border-0 rounded-4 overflow-hidden shadow-sm" id="ch1">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ch1Body" aria-expanded="true">
+              📘 Chapter 1 — Basics & Tricky Questions
+            </button>
+          </h2>
+          <div id="ch1Body" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="row g-3" id="grid">
 
+                <!-- Card: IP Address -->
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="test-card p-3" data-date="22/08/2025" data-title="IP Address">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                      <div>
+                        <div class="test-title">IP Address</div>
+                        <div class="test-sub">Networking basics</div>
+                        <span class="test-date-chip mt-2"><i class="bi bi-calendar-event me-1"></i>22/08/2025</span>
+                      </div>
+                      <a href="https://forms.gle/8pUBk74vazhysvVWA" target="_blank" class="btn btn-primary btn-round">Start</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card: Binary Number -->
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="test-card p-3" data-date="23/08/2025" data-title="Binary Number">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                      <div>
+                        <div class="test-title">Binary Number</div>
+                        <div class="test-sub">Number system</div>
+                        <span class="test-date-chip mt-2"><i class="bi bi-calendar-event me-1"></i>23/08/2025</span>
+                      </div>
+                      <a href="https://forms.gle/cNmLasjNMrJ3mCVp7" target="_blank" class="btn btn-primary btn-round">Start</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card: Miscellaneous CH1 -->
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="test-card p-3" data-date="25/08/2025" data-title="Miscellaneous CH1">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                      <div>
+                        <div class="test-title">Miscellaneous CH1</div>
+                        <div class="test-sub">Mixed concepts</div>
+                        <span class="test-date-chip mt-2"><i class="bi bi-calendar-event me-1"></i>25/08/2025</span>
+                      </div>
+                      <a href="https://forms.gle/ccUrFcU2ZCc9eLGc6" target="_blank" class="btn btn-primary btn-round">Start</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card: Front-end & Back-end (has LIVE) -->
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="test-card p-3" data-date="29/08/2025" data-title="Front-end & Back-end">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                      <div>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="test-title">Front-end & Back-end</div>
+                          <span class="live-badge d-none"><span class="live-dot"></span>LIVE</span>
+                        </div>
+                        <div class="test-sub">Client vs Server</div>
+                        <span class="test-date-chip mt-2"><i class="bi bi-calendar-event me-1"></i>29/08/2025</span>
+                      </div>
+                      <a href="https://forms.gle/V1eJDFJ5WCHJsRce7" target="_blank" class="btn btn-primary btn-round">Start</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card: Tricky Questions (Hindi/English) -->
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="test-card p-3" data-date="02/09/2025" data-title="Chapter 1 - Tricky Questions">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                      <div>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="test-title">Chapter 1 — Tricky Questions</div>
+                          <span class="live-badge d-none"><span class="live-dot"></span>LIVE</span>
+                        </div>
+                        <div class="test-sub">Challenge yourself</div>
+                        <span class="test-date-chip mt-2"><i class="bi bi-calendar-event me-1"></i>02/09/2025</span>
+                      </div>
+                      <div class="d-flex flex-column gap-2">
+                        <a href="https://forms.gle/L3vNqoL1gVN3qNVk8" target="_blank" class="btn btn-success btn-round"><i class="bi bi-translate me-1"></i>हिन्दी</a>
+                        <a href="https://forms.gle/5ZdJLAttPGK1zUqGA" target="_blank" class="btn btn-info text-white btn-round"><i class="bi bi-translate me-1"></i>English</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Empty state -->
+              <div id="empty" class="empty text-center text-secondary py-4">
+                <i class="bi bi-emoji-neutral mb-2" style="font-size:2rem"></i>
+                <p class="mb-0">No tests match your filters.</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- Add more chapters here later -->
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="text-center my-4">
-    <a href="index.html" class="text-decoration-none text-primary">&larr; Back to Home</a>
+  <footer class="py-4 text-center text-secondary small">
+    <div class="container">© 2025 Online Test • <a href="index.html" class="text-decoration-none">Back to Home</a></div>
   </footer>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Highlight Today / Fade Past -->
-
-    <script>
-  function formatDate(date) {
-    let d = date.getDate().toString().padStart(2, '0');
-    let m = (date.getMonth() + 1).toString().padStart(2, '0');
-    let y = date.getFullYear();
-    return `${d}/${m}/${y}`;
-  }
-
-  let today = formatDate(new Date());
-  document.querySelectorAll(".test-card").forEach(card => {
-    let testDate = card.getAttribute("data-date");
-    let badge = card.querySelector(".live-badge");
-
-    if (testDate === today) {
-      card.classList.add("today");
-      if (badge) badge.classList.remove("d-none"); // show LIVE only today
-    } else {
-      let [d, m, y] = testDate.split("/").map(Number);
-      let test = new Date(y, m - 1, d);
-      let now = new Date();
-
-      if (test < now.setHours(0,0,0,0)) {
-        card.classList.add("past");
-        if (badge) badge.classList.add("d-none"); // hide LIVE if past
-      }
+  <script>
+    // --- Utilities
+    function parseDMY(str){
+      // expect DD/MM/YYYY
+      const [d,m,y] = str.split('/').map(Number);
+      return new Date(y, m-1, d);
     }
-  });
-</script>
+    function formatDMY(date){
+      const d = String(date.getDate()).padStart(2,'0');
+      const m = String(date.getMonth()+1).padStart(2,'0');
+      const y = date.getFullYear();
+      return `${d}/${m}/${y}`;
+    }
 
+    const todayDMY = formatDMY(new Date());
 
+    // --- Classify cards and toggle LIVE
+    const cards = document.querySelectorAll('.test-card');
+    cards.forEach(card =>{
+      const dateStr = card.getAttribute('data-date');
+      const date = parseDMY(dateStr);
+      const now = new Date();
+      // normalize to local midnight comparison
+      const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const cardMid = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
+      let status = 'upcoming';
+      if(cardMid.getTime() < todayMid.getTime()) status = 'past';
+      if(cardMid.getTime() === todayMid.getTime()) status = 'today';
+      card.dataset.status = status;
+      card.classList.add(status);
+
+      // LIVE badge only for today
+      const live = card.querySelector('.live-badge');
+      if(live){
+        if(status === 'today') live.classList.remove('d-none'); else live.classList.add('d-none');
+      }
+    });
+
+    // --- Filters
+    let activeFilter = 'all';
+    function setFilter(btn){
+      document.querySelectorAll('.filter-pills .btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    }
+
+    function applyFilters(){
+      const q = (document.getElementById('search').value || '').trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card =>{
+        const status = card.dataset.status; // past | today | upcoming
+        const title = (card.getAttribute('data-title')||'').toLowerCase();
+        let ok = true;
+        if(activeFilter !== 'all') ok = ok && (status === activeFilter);
+        if(q) ok = ok && title.includes(q);
+        card.parentElement.style.display = ok ? '' : 'none';
+        if(ok) visible++;
+      });
+      document.getElementById('empty').style.display = visible ? 'none' : 'block';
+    }
+
+    // initial apply to ensure empty-state correct
+    applyFilters();
+  </script>
 </body>
 </html>
