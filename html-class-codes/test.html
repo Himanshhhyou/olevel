@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ClassPad — Mobile-like Student Site</title>
+  <style>
+    /* Simple mobile-app like styles (responsive) */
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#99a3b2;--accent:#4f46e5}
+    *{box-sizing:border-box;font-family:Inter, system-ui, Arial}
+    body{margin:0;background:linear-gradient(180deg,#071026 0%,#071629 100%);color:#e6eef8;min-height:100vh;display:flex;flex-direction:column}
+    .app{max-width:460px;margin:12px auto;flex:1;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+    header h1{font-size:18px;margin:0}
+    .content{padding:12px 16px;flex:1;overflow:auto}
+    .card{background:rgba(255,255,255,0.02);border-radius:12px;padding:12px;margin-bottom:12px}
+    .row{display:flex;gap:10px}
+    .note-title{font-weight:600}
+    .muted{color:var(--muted);font-size:13px}
+    .bottom-nav{display:flex;gap:6px;padding:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);justify-content:space-between}
+    .btn{background:var(--accent);border:none;padding:8px 12px;border-radius:10px;color:white;cursor:pointer}
+    .icon-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .list{display:flex;flex-direction:column;gap:8px}
+    .small{font-size:13px}
+    .center{text-align:center}
+    .badge{background:rgba(255,255,255,0.04);padding:6px 8px;border-radius:999px;font-size:13px}
+    .modal{position:fixed;inset:0;background:rgba(3,6,15,0.6);display:flex;align-items:center;justify-content:center}
+    .modal-inner{width:92%;max-width:520px;background:#041028;padding:16px;border-radius:12px}
+    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;margin-bottom:8px}
+    label{font-size:13px;color:var(--muted);margin-bottom:6px;display:block}
+    .row-wrap{display:flex;gap:8px}
+    @media(min-width:600px){body{background:#07142a}
+    .app{margin:28px auto}}
+  </style>
+  <!-- Firebase (compat version for easy quick start). Replace config below with your project config. -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <header>
+      <h1>ClassPad</h1>
+      <div>
+        <button class="icon-btn" id="btnRefresh">Refresh</button>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="muted">Welcome</div>
+            <div id="userEmail">Guest</div>
+          </div>
+          <div style="text-align:right">
+            <div class="badge" id="userStatus">Not signed</div>
+            <div style="margin-top:6px">
+              <button class="btn" id="btnSignIn">Sign In</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="note-title">Class Notes</div>
+            <div class="muted small">Notes shared by teachers / students</div>
+          </div>
+          <div>
+            <button class="icon-btn" id="btnAddNote">+ Add</button>
+          </div>
+        </div>
+        <div id="notesList" class="list">
+          <!-- notes loaded here -->
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="note-title">Class Codes</div>
+            <div class="muted small">Share codes / links for classes</div>
+          </div>
+          <div>
+            <button class="icon-btn" id="btnAddCode">+ Add</button>
+          </div>
+        </div>
+        <div id="codesList" class="list"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="note-title">Online Tests</div>
+            <div class="muted small">Take or create timed quizzes</div>
+          </div>
+          <div>
+            <button class="icon-btn" id="btnCreateQuiz">+ Create</button>
+          </div>
+        </div>
+        <div id="quizzesList" class="list"></div>
+      </div>
+
+    </div>
+
+    <div class="bottom-nav">
+      <div class="muted">Mobile-like web app • responsive</div>
+      <div style="display:flex;gap:8px">
+        <button class="icon-btn" id="btnHelp">Help</button>
+        <button class="btn" id="btnOpenHomepage">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal containers (hidden by default) -->
+  <div id="modalRoot" style="display:none"></div>
+
+  <script>
+    // ----- === CONFIG: replace with your Firebase project's config ===
+    const firebaseConfig = {
+      apiKey: "REPLACE_ME",
+      authDomain: "REPLACE_ME",
+      projectId: "REPLACE_ME",
+      // storageBucket, messagingSenderId, appId optional for this MVP
+    };
+    // ------------------------------------------------------------------
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Basic UI helpers
+    const $ = (id)=>document.getElementById(id);
+    const modalRoot = $('modalRoot');
+
+    function showModal(html){
+      modalRoot.innerHTML = `<div class="modal"> <div class="modal-inner">${html}<div style=\"text-align:right;margin-top:6px\"><button class=\"btn\" id=\"modalClose\">Close</button></div></div></div>`;
+      modalRoot.style.display = 'block';
+      document.getElementById('modalClose').onclick = ()=>{ modalRoot.style.display='none'; modalRoot.innerHTML=''; }
+    }
+
+    // Auth: simple email/password sign-in (admin can be any email you create via Firebase console)
+    $('btnSignIn').addEventListener('click',()=>{
+      showModal(`
+        <h3>Sign in</h3>
+        <label>Email</label><input id="siEmail" placeholder="you@example.com">
+        <label>Password</label><input id="siPass" type="password" placeholder="password">
+        <div style="display:flex;gap:8px"><button class="btn" id="doSignIn">Sign in</button><button class="icon-btn" id="doAnon">Continue as Guest</button></div>
+      `);
+      document.getElementById('doSignIn').onclick = async ()=>{
+        const e = document.getElementById('siEmail').value.trim();
+        const p = document.getElementById('siPass').value;
+        try{ await auth.signInWithEmailAndPassword(e,p); modalRoot.style.display='none'; modalRoot.innerHTML=''; }
+        catch(err){ alert('Sign in error: '+err.message) }
+      }
+      document.getElementById('doAnon').onclick = async ()=>{ await auth.signInAnonymously(); modalRoot.style.display='none'; modalRoot.innerHTML=''; }
+    })
+
+    auth.onAuthStateChanged(user=>{
+      if(user){
+        $('userEmail').innerText = user.email || 'Guest';
+        $('userStatus').innerText = user.isAnonymous? 'Guest' : 'Signed in';
+      } else { $('userEmail').innerText='Guest'; $('userStatus').innerText='Not signed'; }
+    })
+
+    // Load notes
+    async function loadNotes(){
+      const list = $('notesList'); list.innerHTML = '<div class="muted small">Loading…</div>';
+      try{
+        const snap = await db.collection('notes').orderBy('createdAt','desc').get();
+        if(snap.empty){ list.innerHTML = '<div class="muted">No notes yet.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(doc=>{
+          const d = doc.data();
+          const el = document.createElement('div'); el.className='card';
+          el.style.padding='10px';
+          el.innerHTML = `<div style=\"display:flex;justify-content:space-between\"><div><div class=\"note-title\">${escapeHtml(d.title||'Untitled')}</div><div class=\"muted small\">${escapeHtml(d.subject||'')}</div></div><div class=\"muted small\">${new Date(d.createdAt?.toMillis?d.createdAt.toMillis():Date.now()).toLocaleString()}</div></div><div style=\"margin-top:8px;white-space:pre-wrap;\">${escapeHtml(d.content||'')}</div>`;
+          list.appendChild(el);
+        });
+      }catch(e){ list.innerHTML = '<div class="muted">Error loading notes</div>'; console.error(e); }
+    }
+
+    // Load class codes
+    async function loadCodes(){
+      const list = $('codesList'); list.innerHTML = '<div class="muted small">Loading…</div>';
+      try{
+        const snap = await db.collection('classCodes').orderBy('createdAt','desc').get();
+        if(snap.empty){ list.innerHTML = '<div class="muted">No class codes yet.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(doc=>{
+          const d = doc.data();
+          const el = document.createElement('div'); el.className='card'; el.style.padding='10px';
+          el.innerHTML = `<div style=\"display:flex;justify-content:space-between;align-items:center\"><div><div class=\"note-title\">${escapeHtml(d.title||'Class')}</div><div class=\"muted small\">${escapeHtml(d.code||'')}</div></div><div><button class=\"btn\" onclick=\"navigator.clipboard.writeText('${escapeAttr(d.code||'')}').then(()=>alert('Copied'))\">Copy</button></div></div>`;
+          list.appendChild(el);
+        });
+      }catch(e){ list.innerHTML = '<div class="muted">Error loading codes</div>'; console.error(e); }
+    }
+
+    // Load quizzes
+    async function loadQuizzes(){
+      const list = $('quizzesList'); list.innerHTML = '<div class="muted small">Loading…</div>';
+      try{
+        const snap = await db.collection('quizzes').orderBy('createdAt','desc').get();
+        if(snap.empty){ list.innerHTML = '<div class="muted">No quizzes yet.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(doc=>{
+          const d = doc.data();
+          const el = document.createElement('div'); el.className='card'; el.style.padding='10px';
+          el.innerHTML = `<div style=\"display:flex;justify-content:space-between;align-items:center\"><div><div class=\"note-title\">${escapeHtml(d.title||'Quiz')}</div><div class=\"muted small\">Questions: ${d.questions?.length||0} • Time: ${d.timeLimit||0}s</div></div><div><button class=\"btn\" onclick=\"openQuiz('${doc.id}')\">Start</button></div></div>`;
+          list.appendChild(el);
+        });
+      }catch(e){ list.innerHTML = '<div class="muted">Error loading quizzes</div>'; console.error(e); }
+    }
+
+    // Open quiz (simple runner)
+    window.openQuiz = async function(quizId){
+      try{
+        const doc = await db.collection('quizzes').doc(quizId).get();
+        if(!doc.exists){ alert('Quiz not found'); return; }
+        const q = doc.data();
+        runQuiz(q.title, q.questions || [], q.timeLimit || 60);
+      }catch(e){ alert('Error opening quiz'); console.error(e); }
+    }
+
+    function runQuiz(title, questions, timeLimit){
+      let idx=0, score=0; let remaining = timeLimit;
+      let answers = [];
+      showModal(`<h3>${escapeHtml(title)}</h3><div id=\"quizInner\"></div><div style=\"display:flex;justify-content:space-between;align-items:center;margin-top:8px\"><div class=\"muted small\">Time left: <span id=\"timeLeft\">${remaining}</span>s</div><div><button class=\"btn\" id=\"nextQ\">Next</button></div></div>`);
+      const tInt = setInterval(()=>{ remaining--; const el=document.getElementById('timeLeft'); if(el) el.innerText=remaining; if(remaining<=0){ clearInterval(tInt); submit(); } },1000);
+
+      function showQuestion(){
+        const inner = document.getElementById('quizInner'); if(!inner) return;
+        const cur = questions[idx];
+        inner.innerHTML = `<div class=\"note-title\">Q${idx+1}. ${escapeHtml(cur.q)}</div>` + cur.options.map((opt,i)=>`<div style=\"margin-top:8px\"><label><input type=\"radio\" name=\"opt\" value=\"${i}\"> ${escapeHtml(opt)}</label></div>`).join('');
+      }
+      function submit(){
+        // gather answer for current question
+        const sel = document.querySelector('input[name="opt"]:checked');
+        if(sel){ answers.push(Number(sel.value)); if(Number(sel.value) === (questions[idx].answer||0)) score++; }
+        // score and final
+        clearInterval(tInt); modalRoot.style.display='none'; modalRoot.innerHTML='';
+        alert('Quiz finished. Score: '+score+' / '+questions.length);
+        // optionally record result
+      }
+      document.getElementById('nextQ').onclick = ()=>{
+        const sel = document.querySelector('input[name="opt"]:checked');
+        if(!sel){ if(!confirm('You have not selected an answer. Continue?')) return; }
+        answers.push(sel?Number(sel.value):null); if(sel && Number(sel.value)=== (questions[idx].answer||0)) score++;
+        idx++;
+        if(idx>=questions.length){ submit(); return; }
+        showQuestion();
+      }
+      showQuestion();
+    }
+
+    // Add Note
+    $('btnAddNote').addEventListener('click',()=>{
+      showModal(`
+        <h3>Add Note</h3>
+        <label>Title</label><input id=\"ntTitle\">
+        <label>Subject (optional)</label><input id=\"ntSubject\">
+        <label>Content</label><textarea id=\"ntContent\" rows=6></textarea>
+        <div style=\"text-align:right\"><button class=\"btn\" id=\"doAddNote\">Save</button></div>
+      `);
+      document.getElementById('doAddNote').onclick = async ()=>{
+        const title = document.getElementById('ntTitle').value.trim();
+        const subject = document.getElementById('ntSubject').value.trim();
+        const content = document.getElementById('ntContent').value.trim();
+        if(!title || !content){ alert('Title and content required'); return; }
+        try{
+          await db.collection('notes').add({title,subject,content,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+          modalRoot.style.display='none'; modalRoot.innerHTML=''; loadNotes();
+        }catch(e){ alert('Error saving note'); console.error(e);}      }
+    })
+
+    // Add Class Code
+    $('btnAddCode').addEventListener('click',()=>{
+      showModal(`
+        <h3>Add Class Code</h3>
+        <label>Title</label><input id=\"ccTitle\">
+        <label>Code / Link</label><input id=\"ccCode\">
+        <div style=\"text-align:right\"><button class=\"btn\" id=\"doAddCode\">Save</button></div>
+      `);
+      document.getElementById('doAddCode').onclick = async ()=>{
+        const title = document.getElementById('ccTitle').value.trim();
+        const code = document.getElementById('ccCode').value.trim();
+        if(!title || !code){ alert('Title and code required'); return; }
+        try{ await db.collection('classCodes').add({title,code,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); modalRoot.style.display='none'; modalRoot.innerHTML=''; loadCodes(); }catch(e){alert('Error');}
+      }
+    })
+
+    // Create Quiz
+    $('btnCreateQuiz').addEventListener('click',()=>{
+      showModal(`
+        <h3>Create Quiz</h3>
+        <label>Title</label><input id=\"qTitle\">
+        <label>Time limit (seconds)</label><input id=\"qTime\" type=\"number\" value=\"60\">
+        <label>Questions (JSON array). Example: [{"q":"What is 2+2?","options":["1","2","3","4"],"answer":3}]</label>
+        <textarea id=\"qQuestions\" rows=8 placeholder=\"[{\"q\":\"Q?\",\"options\":[\"a\",\"b\"],\"answer\":0}]\"></textarea>
+        <div style=\"text-align:right\"><button class=\"btn\" id=\"doCreateQuiz\">Create</button></div>
+      `);
+      document.getElementById('doCreateQuiz').onclick = async ()=>{
+        const title = document.getElementById('qTitle').value.trim();
+        const t = Number(document.getElementById('qTime').value||60);
+        let qs;
+        try{ qs = JSON.parse(document.getElementById('qQuestions').value); }
+        catch(e){ alert('Invalid JSON for questions'); return; }
+        if(!title || !Array.isArray(qs) || qs.length==0){ alert('Provide title and at least 1 question'); return; }
+        try{ await db.collection('quizzes').add({title,questions:qs,timeLimit:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); modalRoot.style.display='none'; modalRoot.innerHTML=''; loadQuizzes(); }catch(e){ alert('Error creating quiz'); console.error(e); }
+      }
+    })
+
+    // Utilities & initial load
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;' }[c]||c)); }
+    function escapeAttr(s){ return (s||'').replace(/'/g,"\\'").replace(/\"/g,'\"'); }
+
+    $('btnRefresh').addEventListener('click',()=>{ loadAll(); });
+    $('btnHelp').addEventListener('click',()=>{ alert('This is a demo app. Replace Firebase config with your project details, then create an admin user from Firebase console to sign in.'); });
+
+    function loadAll(){ loadNotes(); loadCodes(); loadQuizzes(); }
+    loadAll();
+
+    // Helpful: if user is admin, you can add extra controls — left for customization
+  </script>
+
+  <!-- Footer note (invisible to app users) -->
+  <!-- How to use: 1) Create Firebase project, enable Firestore (in test mode for quick start) and Email/Password + Anonymous auth. 2) Replace firebaseConfig object above. 3) Host this file on Firebase Hosting / Netlify / GitHub Pages. -->
+</body>
+</html>

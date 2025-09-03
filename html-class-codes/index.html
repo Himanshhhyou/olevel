@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Code Viewer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" id="hljs-theme" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+  .code-container {
+  display: flex;
+  width: 100%;
+  background-color: #0D1117; /* Match bg-gray-800 */
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+
+
+#code-block {
+  flex: 1;
+  color: #e2e8f0; /* text color */
+  width: 100%;
+}
+
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      flex-shrink: 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .line-numbers {
+      user-select: none;
+      padding-right: 1rem;
+      color: #6b7280;
+      background-color: #1e293b;
+      text-align: right;
+    }
+    .settings-panel {
+      transition: transform 0.3s ease;
+    }
+    #hamburger-icon, .fa-cog {
+      transition: transform 0.2s ease;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-spin {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans">
+
+<header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+  <h1 class="text-xl font-bold">HTML Class Codes</h1>
+  <div class="flex items-center gap-4">
+    <!-- Hamburger Icon -->
+    <button id="menu-btn" class="text-2xl md:hidden p-2 rounded hover:bg-blue-700 transition-colors" onclick="toggleSidebar()">
+      <i id="hamburger-icon" class="fas fa-bars"></i>
+    </button>
+
+    <!-- Theme Toggle -->
+<!--     <button id="theme-toggle" class="p-2 rounded-full hover:bg-blue-500 transition-colors bg-blue-500 text-white" onclick="toggleTheme()">
+      <i id="theme-icon" class="fas fa-sun"></i>
+    </button> -->
+
+    <!-- Settings Button -->
+    <button class="p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600 transition-colors" onclick="toggleSettings()" title="Settings">
+      <i class="fas fa-cog text-lg"></i>
+    </button>
+  </div>
+</header>
+
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" onclick="closeSidebar()"></div>
+
+<main class="flex flex-1">
+  <aside id="sidebar" class="sidebar w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4 flex flex-col gap-4 fixed md:static top-0 left-0 h-full z-50 -translate-x-full md:translate-x-0">
+    <input type="text" class="search-input p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search files..." oninput="filterFiles(this.value)" />
+    <div class="file-list flex flex-col gap-2 max-h-[50vh] overflow-y-auto">
+      <div class="file-item p-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors" onclick="loadCode('class-codes/01_my-first-webpage.html')">01_my-first-webpage.html</div>
+      <div class="file-item p-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors" onclick="loadCode('class-codes/02_container-and-empty-tag.html')">02_container-and-empty-tag.html</div>
+      <div class="file-item p-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors" onclick="loadCode('class-codes/03_headings.html')">03_headings.html</div>
+    </div>
+
+      <hr>
+      <h3 style="margin-top: 10px;">Mini Projects</h3>
+    <div class=" file-list flex flex-col gap-2 max-h-[50vh] overflow-y-auto">
+      <div class="file-item p-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white transition-colors" onclick="loadCode('mini-projects/maggieRecipe.html')">maggieRecipe.html</div>
+    </div>
+  </aside>
+
+  <section class="content flex-1 p-6 overflow-y-auto fade-in">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold">Code Preview</h2>
+      <div class="flex gap-2">
+        <button id="copy-btn" class="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors" onclick="copyCode()">Copy Code</button>
+        <button id="download-btn" class="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors" onclick="downloadCode()">Download</button>
+      </div>
+    </div>
+    <div class="code-container rounded-lg">
+      
+      <pre class="line-numbers p-4"></pre>
+      <pre><code id="code-block" class="language-none"></code></pre>
+    </div>
+    <br>
+    <!-- <h2 class="text-2xl font-semibold">Output</h2> -->
+    <iframe id="live-preview" class="w-full h-[500px] mt-6 rounded-lg shadow-lg bg-white"></iframe>
+
+
+  </section>
+
+  <div id="settings-panel" class="settings-panel fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-200 dark:border-gray-700 transform translate-x-full transition-transform z-50">
+    <h3 class="text-lg font-semibold mb-4">Settings</h3>
+    <label class="block mb-1">Font Size</label>
+    <input type="range" id="font-size-slider" min="12" max="24" value="16" class="w-full" oninput="changeFontSize(this.value)">
+    <button class="mt-4 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" onclick="toggleSettings()">Close</button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>
+  let currentFilename = '';
+
+  async function loadCode(filename) {
+    try {
+      const res = await fetch(filename);
+      if (!res.ok) throw new Error("File not found");
+      const text = await res.text();
+      currentFilename = filename;
+
+      const codeBlock = document.getElementById("code-block");
+      const ext = filename.split('.').pop();
+      codeBlock.className = `language-${ext === "css" ? "css" : "html"}`;
+      codeBlock.textContent = text;
+      hljs.highlightElement(codeBlock);
+      updateLineNumbers(text);
+      closeSidebar();
+
+    const livePreview = document.getElementById("live-preview");
+    if (ext === "html") {
+      livePreview.srcdoc = text;
+      livePreview.style.display = "block";
+    } else {
+      livePreview.style.display = "none";
+    }
+
+    } catch (err) {
+      const codeBlock = document.getElementById("code-block");
+      codeBlock.textContent = "⚠️ Error loading file: " + err.message;
+      document.querySelector(".line-numbers").textContent = "";
+      document.getElementById("live-preview").style.display = "none";
+    }
+  }
+  
+
+
+  // function toggleTheme() {
+  //   document.body.classList.toggle("dark");
+  //   const themeLink = document.getElementById("hljs-theme");
+  //   themeLink.href = document.body.classList.contains("dark")
+  //     ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css"
+  //     : "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/docco.min.css";
+
+  //   const icon = document.getElementById("theme-icon");
+  //   icon.classList.toggle("fa-sun", !document.body.classList.contains("dark"));
+  //   icon.classList.toggle("fa-moon", document.body.classList.contains("dark"));
+  // }
+
+
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const icon = document.getElementById("hamburger-icon");
+    const isOpen = sidebar.classList.contains("show");
+
+    if (isOpen) {
+      sidebar.classList.remove("show");
+      sidebar.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+      icon.classList.remove("fa-times");
+      icon.classList.add("fa-bars");
+    } else {
+      sidebar.classList.add("show");
+      sidebar.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+      icon.classList.remove("fa-bars");
+      icon.classList.add("fa-times");
+    }
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const icon = document.getElementById("hamburger-icon");
+    sidebar.classList.remove("show");
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+    icon.classList.remove("fa-times");
+    icon.classList.add("fa-bars");
+  }
+
+  function toggleSettings() {
+    const panel = document.getElementById("settings-panel");
+    panel.classList.toggle("translate-x-full");
+  }
+
+  function copyCode() {
+    const code = document.getElementById("code-block").textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "Copied!";
+      setTimeout(() => btn.textContent = "Copy Code", 2000);
+    });
+  }
+
+  function downloadCode() {
+    if (!currentFilename) return;
+    const code = document.getElementById("code-block").textContent;
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = currentFilename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function updateLineNumbers(text) {
+    const lineNumbers = document.querySelector(".line-numbers");
+    const lines = text.split('\n').length;
+    lineNumbers.textContent = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
+  }
+
+  function changeFontSize(size) {
+    document.getElementById("code-block").style.fontSize = `${size}px`;
+    document.querySelector(".line-numbers").style.fontSize = `${size}px`;
+  }
+
+  function filterFiles(query) {
+    const items = document.querySelectorAll(".file-item");
+    items.forEach(item => {
+      item.style.display = item.textContent.toLowerCase().includes(query.toLowerCase()) ? "block" : "none";
+    });
+  }
+</script>
+</body>
+</html>
