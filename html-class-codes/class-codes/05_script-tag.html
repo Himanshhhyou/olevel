@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>script tag</title>
+</head>
+<body>
+    <input type="text" placeholder="Enter Your Name">
+    <button onclick="myfun()">Click me</button><br>
+    <p></p>
+    <script>
+        function myfun(){
+            var name = document.querySelector('input').value;
+            var res = document.querySelector('p');
+            res.innerText = "Hello "+name.toUpperCase();
+        }
+    </script>
+</body>
+</html>
