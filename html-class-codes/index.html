@@ -165,13 +165,10 @@
       closeSidebar();
 
     const livePreview = document.getElementById("live-preview");
-   // if (ext === "html") {
-   //   livePreview.srcdoc = text;
-   //   livePreview.style.display = "block";
-      if (ext === "html") {
-  const base = `<base href="${location.origin}/${filename.substring(0, filename.lastIndexOf('/')+1)}">`;
-  livePreview.srcdoc = base + text;
-  livePreview.style.display = "block";
+   if (ext === "html") {
+     livePreview.srcdoc = text;
+     livePreview.style.display = "block";
+      
     } else {
       livePreview.style.display = "none";
     }
@@ -186,20 +183,6 @@
     }
   }
   
-
-
-  // function toggleTheme() {
-  //   document.body.classList.toggle("dark");
-  //   const themeLink = document.getElementById("hljs-theme");
-  //   themeLink.href = document.body.classList.contains("dark")
-  //     ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css"
-  //     : "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/docco.min.css";
-
-  //   const icon = document.getElementById("theme-icon");
-  //   icon.classList.toggle("fa-sun", !document.body.classList.contains("dark"));
-  //   icon.classList.toggle("fa-moon", document.body.classList.contains("dark"));
-  // }
-
 
 
   function toggleSidebar() {
