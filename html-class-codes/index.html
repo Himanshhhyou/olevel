@@ -165,12 +165,18 @@
       closeSidebar();
 
     const livePreview = document.getElementById("live-preview");
-    if (ext === "html") {
-      livePreview.srcdoc = text;
-      livePreview.style.display = "block";
+   // if (ext === "html") {
+   //   livePreview.srcdoc = text;
+   //   livePreview.style.display = "block";
+      if (ext === "html") {
+  const base = `<base href="${location.origin}/${filename.substring(0, filename.lastIndexOf('/')+1)}">`;
+  livePreview.srcdoc = base + text;
+  livePreview.style.display = "block";
     } else {
       livePreview.style.display = "none";
     }
+
+      
 
     } catch (err) {
       const codeBlock = document.getElementById("code-block");
@@ -275,6 +281,7 @@
 </body>
 
 </html>
+
 
 
 
