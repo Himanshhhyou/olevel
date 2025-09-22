@@ -107,31 +107,53 @@
         class="p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 mt-2 focus:ring-2 focus:ring-blue-500"
         placeholder="Search files..." oninput="filterFiles(this.value)" />
 
-      <!-- 🔹 Files List -->
-      <div id="files-section" class="file-list flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
-        <!-- Sample Files -->
-        <div class="file-item p-2 flex items-center gap-2 rounded-lg cursor-pointer"
-          onclick="loadCode('class-codes/01_my-first-webpage.html')"><i class="fas fa-file-code"></i>
-          01_my-first-webpage.html</div>
-        <div class="file-item p-2 flex items-center gap-2 rounded-lg cursor-pointer"
-          onclick="loadCode('class-codes/02_container-and-empty-tag.html')"><i class="fas fa-file-code"></i>
-          02_container-and-empty-tag.html</div>
-        <div class="file-item p-2 flex items-center gap-2 rounded-lg cursor-pointer"
-          onclick="loadCode('class-codes/03_headings.html')"><i class="fas fa-file-code"></i> 03_headings.html</div>
-        <!-- Add remaining files as needed -->
-      </div>
+     <!-- 🔹 Files List -->
+<div id="files-section" class="file-list flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
+  <!-- 01-33 HTML Files -->
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/01_my-first-webpage.html')"><i class="fas fa-file-code"></i> 01_my-first-webpage.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/02_container-and-empty-tag.html')"><i class="fas fa-file-code"></i> 02_container-and-empty-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/03_headings.html')"><i class="fas fa-file-code"></i> 03_headings.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/04_style-tag.html')"><i class="fas fa-file-code"></i> 04_style-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/05_script-tag.html')"><i class="fas fa-file-code"></i> 05_script-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/06_img-tag.html')"><i class="fas fa-file-code"></i> 06_img-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/07_base-tag.html')"><i class="fas fa-file-code"></i> 07_base-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/08_link-tag.html')"><i class="fas fa-file-code"></i> 08_link-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/08_link-tag.css')"><i class="fas fa-paint-brush"></i> 08_link-tag.css</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/09_meta-tag.html')"><i class="fas fa-file-code"></i> 09_meta-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/10_noscript.html')"><i class="fas fa-file-code"></i> 10_noscript.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/11_body-tag-attributes.html')"><i class="fas fa-file-code"></i> 11_body-tag-attributes.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/12_body-tag-attributes-2.html')"><i class="fas fa-file-code"></i> 12_body-tag-attributes-2.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/13_meta-theme.html')"><i class="fas fa-file-code"></i> 13_meta-theme.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/14_formatting-tags.html')"><i class="fas fa-file-code"></i> 14_formatting-tags.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/15_teletype-tag.html')"><i class="fas fa-file-code"></i> 15_teletype-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/16_font-tag.html')"><i class="fas fa-file-code"></i> 16_font-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/17_pre-tag.html')"><i class="fas fa-file-code"></i> 17_pre-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/18_hr-tag.html')"><i class="fas fa-file-code"></i> 18_hr-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/19_div-tag.html')"><i class="fas fa-file-code"></i> 19_div-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/20_anchor-tag.html')"><i class="fas fa-file-code"></i> 20_anchor-tag.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/21_anchor-target.html')"><i class="fas fa-file-code"></i> 21_anchor-target.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/22_html-entities.html')"><i class="fas fa-file-code"></i> 22_html-entities.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/23_internal-anchor.html')"><i class="fas fa-file-code"></i> 23_internal-anchor.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/24_link-jump.html')"><i class="fas fa-file-code"></i> 24_link-jump.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/25_link-colors.html')"><i class="fas fa-file-code"></i> 25_link-colors.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/26_comment.html')"><i class="fas fa-file-code"></i> 26_comment.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/27_table-1.html')"><i class="fas fa-file-code"></i> 27_table-1.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/28_table-2.html')"><i class="fas fa-file-code"></i> 28_table-2.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/29_table-rowspan-1.html')"><i class="fas fa-file-code"></i> 29_table-rowspan-1.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/30_table-rowspan-2.html')"><i class="fas fa-file-code"></i> 30_table-rowspan-2.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/31_table-colspan-1.html')"><i class="fas fa-file-code"></i> 31_table-colspan-1.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/32_col-row.html')"><i class="fas fa-file-code"></i> 32_col-row.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/33_school-time-table.html')"><i class="fas fa-file-code"></i> 33_school-time-table.html</div>
+</div>
 
-      <!-- 🔹 Projects List -->
-      <div id="projects-section" class="hidden flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
-        <div class="file-item p-2 flex items-center gap-2 rounded-lg cursor-pointer"
-          onclick="loadCode('mini-projects/maggieRecipe.html')"><i class="fas fa-utensils"></i> maggieRecipe.html
-        </div>
-        <div class="file-item p-2 flex items-center gap-2 rounded-lg cursor-pointer"
-          onclick="loadCode('mini-projects/teacher-day.html')"><i class="fas fa-chalkboard-teacher"></i>
-          teacher-day.html
-        </div>
-        <!-- Add remaining projects -->
-      </div>
+<!-- 🔹 Projects List -->
+<div id="projects-section" class="hidden flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/maggieRecipe.html')"><i class="fas fa-utensils"></i> maggieRecipe.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/teacher-day.html')"><i class="fas fa-chalkboard-teacher"></i> teacher-day.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/chess-board.html')"><i class="fas fa-chess-board"></i> chess-board.html</div>
+  <div class="file-item p-2 flex items-center gap-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/minecraft-sword.html')"><i class="fa-solid fa-sword"></i> minecraft-sword.html</div>
+</div>
+
 
     </aside>
 
