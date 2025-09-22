@@ -15,26 +15,26 @@
 
   <style>
     body {
-      color: #111827;
-      background-color: #f9fafb;
+      color: #363636;
+      background-color: #f9f9f9;
     }
 
     .sidebar {
       transition: transform 0.3s ease;
-      background-color: #ffffff;
     }
 
     .fade-in {
       animation: fadeIn 0.5s ease-in;
     }
 
-    .code-container {
+    .code-output-container {
       display: flex;
+      flex-direction: column;
       width: 100%;
-      background: #f3f4f6;
       border-radius: 0.5rem;
-      overflow-x: auto;
-      border: 1px solid #d1d5db;
+      overflow: hidden;
+      background: #fdfdfd;
+      border: 1px solid #ddd;
     }
 
     pre {
@@ -47,8 +47,9 @@
       user-select: none;
       padding-right: 1rem;
       color: #6b7280;
-      background: #e5e7eb;
+      background: #f3f3f3;
       text-align: right;
+      border-bottom: 1px solid #ddd;
     }
 
     @keyframes fadeIn {
@@ -59,15 +60,6 @@
       to {
         opacity: 1;
       }
-    }
-
-    .file-item:hover {
-      background-color: #3b82f6;
-      color: white;
-    }
-
-    input::placeholder {
-      color: #9ca3af;
     }
   </style>
 </head>
@@ -95,7 +87,7 @@
   <main class="flex flex-1">
     <!-- Sidebar -->
     <aside id="sidebar"
-      class="sidebar w-72 border-r border-gray-300 p-4 flex flex-col gap-4 fixed md:static top-0 left-0 h-full z-50 -translate-x-full md:translate-x-0">
+      class="sidebar w-72 bg-white border-r border-gray-300 p-4 flex flex-col gap-4 fixed md:static top-0 left-0 h-full z-50 -translate-x-full md:translate-x-0 overflow-y-auto">
       <!-- Tabs -->
       <div class="flex justify-between items-center p-1 rounded-lg">
         <button id="files-tab" class="flex-1 py-2 rounded-md bg-blue-500 text-white font-medium">Files</button>
@@ -104,177 +96,117 @@
 
       <!-- Search -->
       <input id="search-bar" type="text"
-        class="p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 mt-2 focus:ring-2 focus:ring-blue-500"
+        class="p-2 border border-gray-400 rounded-lg bg-white text-gray-800 mt-2 focus:ring-2 focus:ring-blue-500"
         placeholder="Search files..." oninput="filterFiles(this.value)" />
 
-     <!-- 🔹 Files List -->
-<div id="files-section" class="file-list flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
-  <!-- 01-33 HTML Files -->
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/01_my-first-webpage.html')"><i class="fas fa-file-code"></i> 01_my-first-webpage.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/02_container-and-empty-tag.html')"><i class="fas fa-file-code"></i> 02_container-and-empty-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/03_headings.html')"><i class="fas fa-file-code"></i> 03_headings.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/04_style-tag.html')"><i class="fas fa-file-code"></i> 04_style-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/05_script-tag.html')"><i class="fas fa-file-code"></i> 05_script-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/06_img-tag.html')"><i class="fas fa-file-code"></i> 06_img-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/07_base-tag.html')"><i class="fas fa-file-code"></i> 07_base-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/08_link-tag.html')"><i class="fas fa-file-code"></i> 08_link-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/08_link-tag.css')"><i class="fas fa-paint-brush"></i> 08_link-tag.css</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/09_meta-tag.html')"><i class="fas fa-file-code"></i> 09_meta-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/10_noscript.html')"><i class="fas fa-file-code"></i> 10_noscript.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/11_body-tag-attributes.html')"><i class="fas fa-file-code"></i> 11_body-tag-attributes.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/12_body-tag-attributes-2.html')"><i class="fas fa-file-code"></i> 12_body-tag-attributes-2.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/13_meta-theme.html')"><i class="fas fa-file-code"></i> 13_meta-theme.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/14_formatting-tags.html')"><i class="fas fa-file-code"></i> 14_formatting-tags.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/15_teletype-tag.html')"><i class="fas fa-file-code"></i> 15_teletype-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/16_font-tag.html')"><i class="fas fa-file-code"></i> 16_font-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/17_pre-tag.html')"><i class="fas fa-file-code"></i> 17_pre-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/18_hr-tag.html')"><i class="fas fa-file-code"></i> 18_hr-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/19_div-tag.html')"><i class="fas fa-file-code"></i> 19_div-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/20_anchor-tag.html')"><i class="fas fa-file-code"></i> 20_anchor-tag.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/21_anchor-target.html')"><i class="fas fa-file-code"></i> 21_anchor-target.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/22_html-entities.html')"><i class="fas fa-file-code"></i> 22_html-entities.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/23_internal-anchor.html')"><i class="fas fa-file-code"></i> 23_internal-anchor.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/24_link-jump.html')"><i class="fas fa-file-code"></i> 24_link-jump.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/25_link-colors.html')"><i class="fas fa-file-code"></i> 25_link-colors.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/26_comment.html')"><i class="fas fa-file-code"></i> 26_comment.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/27_table-1.html')"><i class="fas fa-file-code"></i> 27_table-1.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/28_table-2.html')"><i class="fas fa-file-code"></i> 28_table-2.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/29_table-rowspan-1.html')"><i class="fas fa-file-code"></i> 29_table-rowspan-1.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/30_table-rowspan-2.html')"><i class="fas fa-file-code"></i> 30_table-rowspan-2.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/31_table-colspan-1.html')"><i class="fas fa-file-code"></i> 31_table-colspan-1.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/32_col-row.html')"><i class="fas fa-file-code"></i> 32_col-row.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('class-codes/33_school-time-table.html')"><i class="fas fa-file-code"></i> 33_school-time-table.html</div>
-</div>
+      <!-- 🔹 Files List -->
+      <div id="files-section" class="file-list flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('class-codes/01_my-first-webpage.html')"><i class="fas fa-file-code"></i>
+          01_my-first-webpage.html</div>
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('class-codes/02_container-and-empty-tag.html')"><i class="fas fa-file-code"></i>
+          02_container-and-empty-tag.html</div>
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('class-codes/03_headings.html')"><i class="fas fa-file-code"></i> 03_headings.html</div>
+        <!-- Add all other files here in similar pattern -->
+      </div>
 
-<!-- 🔹 Projects List -->
-<div id="projects-section" class="hidden flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/maggieRecipe.html')"><i class="fas fa-utensils"></i> maggieRecipe.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/teacher-day.html')"><i class="fas fa-chalkboard-teacher"></i> teacher-day.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/chess-board.html')"><i class="fas fa-chess-board"></i> chess-board.html</div>
-  <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/minecraft-sword.html')">🗡️ minecraft-sword.html</div>
-</div>
-
+      <!-- 🔹 Projects List -->
+      <div id="projects-section" class="hidden flex flex-col gap-2 max-h-[60vh] overflow-y-auto text-sm mt-2">
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('mini-projects/maggieRecipe.html')"><i class="fas fa-utensils"></i> maggieRecipe.html</div>
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('mini-projects/teacher-day.html')"><i class="fas fa-chalkboard-teacher"></i>
+          teacher-day.html</div>
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('mini-projects/chess-board.html')"><i class="fas fa-chess-board"></i> chess-board.html</div>
+        <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white"
+          onclick="loadCode('mini-projects/minecraft-sword.html')"><i class="fa-solid fa-sword"></i>
+          minecraft-sword.html</div>
+      </div>
 
     </aside>
 
     <!-- Content -->
     <section class="content flex-1 p-6 overflow-y-auto fade-in">
-     <!-- <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+      <!-- Buttons -->
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
         <div class="flex gap-2">
           <button id="copy-btn"
             class="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-1"
             onclick="copyCode()">
             <i class="fas fa-copy"></i> Copy
           </button>
+
           <button id="download-btn"
             class="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center gap-1"
             onclick="downloadCode()">
             <i class="fas fa-download"></i> Download
           </button>
+
+          <button id="view-btn"
+            class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-1"
+            onclick="toggleOutput()">
+            <i class="fas fa-eye"></i> View Output
+          </button>
         </div>
-      </div>-->
-<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-  <div class="flex gap-2">
-    <button id="copy-btn"
-      class="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-1"
-      onclick="copyCode()">
-      <i class="fas fa-copy"></i> Copy
-    </button>
-
-    <button id="download-btn"
-      class="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 flex items-center gap-1"
-      onclick="downloadCode()">
-      <i class="fas fa-download"></i> Download
-    </button>
-
-    <button id="view-btn"
-      class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-1"
-      onclick="toggleOutput()">
-      <i class="fas fa-eye"></i> View Output
-    </button>
-  </div>
-</div>
-      <div class="code-container rounded-lg">
-        <pre class="line-numbers p-4"></pre>
-        <pre><code id="code-block" class="language-none"></code></pre>
       </div>
 
-      <!-- <iframe id="live-preview" class="w-full h-[400px] mt-6 rounded-lg shadow-lg bg-white"></iframe> -->
-       <iframe id="live-preview" class="w-full h-[400px] mt-6 rounded-lg shadow-lg bg-gray-100 hidden"></iframe>
+      <!-- Code + Output -->
+      <div class="code-output-container">
+        <pre class="line-numbers p-4" id="line-numbers"></pre>
+        <pre><code id="code-block" class="language-none p-4"></code></pre>
+        <iframe id="live-preview" class="w-full h-[400px] hidden bg-white"></iframe>
+      </div>
     </section>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
   <script>
     let currentFilename = '';
+    let showingOutput = false;
 
-    // async function loadCode(filename) {
-    //   try {
-    //     const res = await fetch(filename);
-    //     if (!res.ok) throw new Error("File not found");
-    //     const text = await res.text();
-    //     currentFilename = filename;
+    async function loadCode(filename) {
+      try {
+        const res = await fetch(filename);
+        if (!res.ok) throw new Error("File not found");
+        const text = await res.text();
+        currentFilename = filename;
 
-    //     const codeBlock = document.getElementById("code-block");
-    //     const ext = filename.split('.').pop();
-    //     codeBlock.className = `language-${ext === "css" ? "css" : ext === "js" ? "javascript" : "html"}`;
-    //     codeBlock.textContent = text;
-    //     hljs.highlightElement(codeBlock);
-    //     updateLineNumbers(text);
+        const codeBlock = document.getElementById("code-block");
+        const lineNumbers = document.getElementById("line-numbers");
+        const ext = filename.split('.').pop();
+        codeBlock.className = `language-${ext === "css" ? "css" : ext === "js" ? "javascript" : "html"}`;
+        codeBlock.textContent = text;
+        hljs.highlightElement(codeBlock);
+        lineNumbers.textContent = Array.from({ length: text.split('\n').length }, (_, i) => i + 1).join('\n');
 
-    //     const preview = document.getElementById("live-preview");
-    //     preview.style.display = ext === "html" ? "block" : "none";
-    //     if (ext === "html") preview.srcdoc = text;
+        const iframe = document.getElementById("live-preview");
+        if (ext === "html") {
+          iframe.srcdoc = text;
+          document.getElementById("view-btn").disabled = false;
+        } else {
+          iframe.srcdoc = "";
+          document.getElementById("view-btn").disabled = true;
+        }
 
-    //   } catch (err) {
-    //     document.getElementById("code-block").textContent = "⚠️ " + err.message;
-    //     document.querySelector(".line-numbers").textContent = "";
-    //     document.getElementById("live-preview").style.display = "none";
-    //   }
-    // }
+        // Reset toggle
+        showingOutput = false;
+        codeBlock.style.display = "block";
+        lineNumbers.style.display = "block";
+        iframe.style.display = "none";
+        document.getElementById("view-btn").innerHTML = '<i class="fas fa-eye"></i> View Output';
 
-    function toggleOutput() {
-  const iframe = document.getElementById("live-preview");
-  iframe.classList.toggle("hidden");
-}
-
-// Update iframe srcdoc when loading HTML
-async function loadCode(filename) {
-  try {
-    const res = await fetch(filename);
-    if (!res.ok) throw new Error("File not found");
-    const text = await res.text();
-    currentFilename = filename;
-
-    const codeBlock = document.getElementById("code-block");
-    const ext = filename.split('.').pop();
-    codeBlock.className = `language-${ext === "css" ? "css" : ext === "js" ? "javascript" : "html"}`;
-    codeBlock.textContent = text;
-    hljs.highlightElement(codeBlock);
-    updateLineNumbers(text);
-
-    const preview = document.getElementById("live-preview");
-    if(ext === "html") {
-      preview.srcdoc = text;
-    } else {
-      preview.srcdoc = "";
+      } catch (err) {
+        document.getElementById("code-block").textContent = "⚠️ " + err.message;
+        document.getElementById("line-numbers").textContent = "";
+        document.getElementById("live-preview").style.display = "none";
+      }
     }
-    preview.classList.add("hidden"); // initially hide
-  } catch (err) {
-    document.getElementById("code-block").textContent = "⚠️ " + err.message;
-    document.querySelector(".line-numbers").textContent = "";
-    document.getElementById("live-preview").classList.add("hidden");
-  }
-}
-
-function toggleSettings() {
-  const panel = document.getElementById("settings-panel");
-  panel.classList.toggle("hidden");
-}
-
 
     function updateLineNumbers(text) {
-      document.querySelector(".line-numbers").textContent = Array.from({ length: text.split('\n').length }, (_, i) => i + 1).join('\n');
+      document.getElementById("line-numbers").textContent = Array.from({ length: text.split('\n').length }, (_, i) => i + 1).join('\n');
     }
 
     function copyCode() {
@@ -290,6 +222,27 @@ function toggleSettings() {
       a.download = currentFilename;
       a.click();
       URL.revokeObjectURL(url);
+    }
+
+    function toggleOutput() {
+      const codeBlock = document.getElementById("code-block");
+      const lineNumbers = document.getElementById("line-numbers");
+      const iframe = document.getElementById("live-preview");
+      const viewBtn = document.getElementById("view-btn");
+
+      showingOutput = !showingOutput;
+
+      if (showingOutput) {
+        codeBlock.style.display = "none";
+        lineNumbers.style.display = "none";
+        iframe.style.display = "block";
+        viewBtn.innerHTML = '<i class="fas fa-code"></i> View Code';
+      } else {
+        codeBlock.style.display = "block";
+        lineNumbers.style.display = "block";
+        iframe.style.display = "none";
+        viewBtn.innerHTML = '<i class="fas fa-eye"></i> View Output';
+      }
     }
 
     function toggleSidebar() {
@@ -309,7 +262,6 @@ function toggleSettings() {
       document.getElementById("hamburger-icon").classList.remove("fa-times");
     }
 
-    // Sidebar Tabs
     document.getElementById("files-tab").addEventListener("click", () => {
       document.getElementById("files-section").classList.remove("hidden");
       document.getElementById("projects-section").classList.add("hidden");
