@@ -57,6 +57,8 @@ php -S localhost:8000
 
 ## 🌿 Branch Management & Contribution Guidelines
 
+> 📖 **Quick Reference**: See [BRANCH_GUIDE.md](BRANCH_GUIDE.md) for a quick branch commands reference card.
+
 ### Creating a New Branch
 
 When contributing to this project, always create a new branch for your changes:
