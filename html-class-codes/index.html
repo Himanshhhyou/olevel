@@ -67,7 +67,22 @@
       height: 600px;
       border: none;
     }
+@keyframes pulseGlow {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+    }
+  }
 
+  .new-label {
+    animation: pulseGlow 1.5s infinite;
+    top: 8px;
+    right: 8px;
+  }
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -176,6 +191,17 @@
 
 <!-- 🔹 Projects List -->
 <div id="projects-section" class="hidden flex flex-col gap-2 max-h-[80vh] overflow-y-auto text-sm mt-2">
+<div class="file-item p-2 flex items-center gap-2 bg-indigo-500 text-white rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white relative"
+     onclick="loadCode('mini-projects/button-design.html')">
+
+  <i class="fa-solid fa-file"></i>
+  <span>button-design.html</span>
+
+  <!-- Animated NEW Label -->
+  <span class="new-label absolute text-red-500 bg-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse shadow-lg" >
+    NEW
+  </span>
+</div>
   <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/maggieRecipe.html')"><i class="fas fa-utensils"></i> maggieRecipe.html</div>
   <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/teacher-day.html')"><i class="fas fa-chalkboard-teacher"></i> teacher-day.html</div>
   <div class="file-item p-2 flex items-center gap-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-500 hover:text-white" onclick="loadCode('mini-projects/chess-board.html')"><i class="fas fa-chess-board"></i> chess-board.html</div>
